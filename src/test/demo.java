@@ -1,41 +1,51 @@
 package test;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Vector;
 
-import javax.print.attribute.standard.PrinterLocation;
 
 public class demo {
-	private int count=0;
-	private int reCursion(int a) {
-		if(a<1 && count != 0) {
-			return count; 
-		}
-		if(count==0) {
-			return -1;
-		}
-		while(a>=1) {
-			count = count * a;
-			a--;
-		}
-		return count; 
-	}
-	//TODO
-	public String longestPalindrome(String s) {
-        char[] c = new char[s.length()];
-//		String str="";
-//		c=str.charAt(0);
-        
-        return "";
-    }
+
 	/*
 	 * 定义训练集和测试集的元素个数
 	 */
 	public static final int Train_Num = 5000;
 	public static final int Test_Num = 5000;
 	public static final String FileName = "E:/test.txt";
+	//存放读入数据
+	public static Vector<String> inData = new Vector<>();
+	/*
+	 * 读取原始数据操作
+	 */
+	public static boolean readData(String url) {
+		try {
+			Scanner in = new Scanner(new File(url));
+			while(in.hasNextLine()) {
+				inData.add(in.nextLine());//文件内容写入
+			}
+			return true;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/*
+	 * 数据预处理
+	 * TODO
+	 */
+	public static boolean preTreatment(Vector<String> sData) {
+		//换成每个向量
+		
+		return false;
+	}
 	
 	/*
 	 *朴素贝叶斯算法实现
