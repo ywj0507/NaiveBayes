@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 /**
  * 练手朴素贝叶斯例子
  * 训练样本 （R,1,3,4,3）
  */
 public class demo {
-
+	private static Logger log = Logger.getLogger(demo.class.getName());
 	/*
 	 * 定义训练集和测试集的元素个数
 	 */
@@ -29,14 +30,15 @@ public class demo {
 		try {
 			Scanner in = new Scanner(new File(url));
 			while(in.hasNextLine()) {
-				inData.add(in.nextLine());//文件内容写入
+				String st = in.nextLine();
+				inData.add(st);//文件内容写入
 			}
+			in.close();
 			return true;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
-		}  
+		}
 //		try {
 //			FileReader read = new FileReader(FileName);
 //			int c = 0;
@@ -116,12 +118,69 @@ public class demo {
 		}
 		return ai_y[0]*ai_y[1]*ai_y[2]*ai_y[3];
 	}
-	
-	
-	public  void main(String[] args) {
-		readData("E:/test.txt");
+	/**
+	 * 求最大值
+	 * @param args
+	 */
+	private static double maxDouble(double... ds ) {
+		double result = 0;
+		for(double tem : ds) {
+			if(tem>result) {
+				result = tem;
+				
+			}
+		}
+		return result;
+	}
+	public static void main(String[] args) {
 		
+		//载入源数据
+		readData("E:/bayes.txt");
+		//预处理数据
+		preTreatment(inData);
+		//计算先验概率
+		double y_R = (double)catagory_R.size() / (double)inData.size();
+		double y_L = (double)catagory_L.size() / (double)inData.size();
+		double y_B = (double)catagory_B.size() / (double)inData.size();
 		
+		int[] x = new int[4];
+		int sumR=0,sumL=0,sumB=0,cor=0;
+		double x_R,x_L,x_B;
+		for(int i=0;i<inData.size();i++) {
+			for(int j =0;j<4;j++) {
+				x[j] = Integer.parseInt(inData.elementAt(i).split(",", 5)[j+1]);
+			}
+			x_R = NaiveBayes(x,catagory_R)*y_R;
+			x_L = NaiveBayes(x,catagory_L)*y_L;
+			x_B = NaiveBayes(x,catagory_B)*y_B;
+			log.info("R,L,B分别为："+x_R+" , "+x_L+" , "+x_B);
+			System.out.println("R,L,B分别为："+x_R+" , "+x_L+" , "+x_B);
+			if(x_R ==maxDouble(x_R,x_L,x_B)) {
+				System.out.println("输入的第 "+i+" 个值被分为：R类");
+				sumR++;
+				if(inData.elementAt(i).split(",", 5)[0].equals("R")) {
+					cor++;
+				}
+			}
+			if(x_L ==maxDouble(x_R,x_L,x_B)) {
+				System.out.println("输入的第 "+i+" 个值被分为：L类");
+				sumL++;
+				if(inData.elementAt(i).split(",", 5)[0].equals("L")) {
+					cor++;
+				}
+			}
+			if(x_B ==maxDouble(x_R,x_L,x_B)) {
+				System.out.println("输入的第 "+i+" 个值被分为：B类");
+				sumB++;
+				if(inData.elementAt(i).split(",", 5)[0].equals("B")) {
+					cor++;
+				}
+			}
+		}
+		System.out.println("正确率："+(cor*1.0)/(inData.size()*1.0)*100.0+"%");
+		System.out.println("被分为R类个数："+sumR);
+		System.out.println("被分为L类个数："+sumL);
+		System.out.println("被分为B类个数："+sumB);
 		
 	}
 }
