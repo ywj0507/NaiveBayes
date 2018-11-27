@@ -142,6 +142,8 @@ public class demo {
 		double y_R = (double)catagory_R.size() / (double)inData.size();
 		double y_L = (double)catagory_L.size() / (double)inData.size();
 		double y_B = (double)catagory_B.size() / (double)inData.size();
+		//修正偏斜
+		y_B = y_B*3.0;
 		
 		int[] x = new int[4];
 		int sumR=0,sumL=0,sumB=0,cor=0;
@@ -154,7 +156,6 @@ public class demo {
 			x_L = NaiveBayes(x,catagory_L)*y_L;
 			x_B = NaiveBayes(x,catagory_B)*y_B;
 			log.info("R,L,B分别为："+x_R+" , "+x_L+" , "+x_B);
-			System.out.println("R,L,B分别为："+x_R+" , "+x_L+" , "+x_B);
 			if(x_R ==maxDouble(x_R,x_L,x_B)) {
 				System.out.println("输入的第 "+i+" 个值被分为：R类");
 				sumR++;
